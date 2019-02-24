@@ -24,8 +24,8 @@ def main():
         while gameOn:
             playerMoves = reversi.findValidMoves(playerColour)
             botMoves = reversi.findValidMoves(botColour)
-            # print("Player's moves:", playerMoves)
-            # print("Bot's moves:", botMoves)
+            print("Player's moves:", playerMoves)
+            print("Bot's moves:", botMoves)
             if reversi.isGameOver(playerMoves) or reversi.isGameOver(botMoves):
                 gameOn = False
             else:
