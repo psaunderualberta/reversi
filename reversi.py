@@ -38,7 +38,8 @@ class Reversi:
               "disks (vertically, horizontally, or diagonally) on opposite sides. ",
               "Any disks that you surround will become yours and will flip over to your colour. ",
               "The game is over when the current player has no possible legal move.",
-              "You will be playing against an artificial intelligence (AI)", sep='\n')
+              "You will be playing against an artificial intelligence (AI)", 
+              "If at any point you would like to stop playing, type 'quit' when prompted for a row.", sep='\n')
 
         self.board = []
         for i in range(self.boardSize):

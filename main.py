@@ -22,15 +22,15 @@ def main():
         print("The bot's score is:", botScore, '\n')
 
         while gameOn:
-            # Don't display the board again if the
-            # player's input was invalid
             playerMoves = reversi.findValidMoves(playerColour)
             botMoves = reversi.findValidMoves(botColour)
-            print("Player's moves:", playerMoves)
+            # print("Player's moves:", playerMoves)
             # print("Bot's moves:", botMoves)
             if reversi.isGameOver(playerMoves) or reversi.isGameOver(botMoves):
                 gameOn = False
             else:
+                # Don't display the board again if the
+                # player's input was invalid
                 if validMove and playersTurn:
                     reversi.displayBoard()
                     print("The player's score is:", playerScore)
