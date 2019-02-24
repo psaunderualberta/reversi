@@ -9,7 +9,7 @@ from random import randint, choice
 # I chose to automatically pick corners if they were available,
 # and then if no corners were available to pick pieces on edges,
 # and then if no edges or corners were available to pick the spot closest to
-# the centre using a 'least-squares' method (line 139)
+# the centre using a 'least-squares' method (somewhere around line 160)
 
 
 class Reversi:
