@@ -284,11 +284,12 @@ class Reversi:
         # Checks if the valid moves are empty (the definition of game over)
         if playerMoves == [] or botMoves == []:
             if playerMoves == [] and botMoves != []:
-                print('The player has no more moves!')
+                print("The player has no more moves,", end=' ')
             elif botMoves == [] and playerMoves != []:
-                print("The bot has no more moves!")
+                print("The bot has no more moves", end=' ')
             else:
-                print("Neither player has any more moves!")
+                print("Neither player has any more moves", end=' ')
+            print("which means that the game is over!")
             return True
         return False
 
