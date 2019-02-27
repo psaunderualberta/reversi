@@ -91,4 +91,17 @@ def main():
             print('Thanks for playing!')
             continueGame = False
 
+
+def checkInput(self, dig):
+        # Checks the player's input to see if it is valid.
+        # The naive bot's input is checked in reversi's 
+        # 'botValidation' method, whereas the smart bot does not need
+        # input validation as it picks one from the set of valid moves
+        try:
+            int(dig)
+            assert self.inBoard(
+                int(dig)), "Please choose an integer between 0 and 7."
+        except Exception:
+            raise
+
 main()

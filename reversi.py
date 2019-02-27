@@ -23,7 +23,6 @@ class Reversi:
         self.topLevel = [str(i) for i in range(self.boardSize)]
         self.board = []
         self.moveset = []
-        self.hint = False
 
     def newGame(self):
         # Produces a clean board for
@@ -78,17 +77,6 @@ class Reversi:
         else:
             self.playerScore = score
         return score
-
-    def checkInput(self, dig, bot=False):
-        # Checks the player's input to see if it is valid.
-        # The bot's input is checked in 'botValidation'
-        try:
-            int(dig)
-            assert self.inBoard(int(dig)), "Please choose an integer between 0 and 7."
-        except TypeError:
-            raise
-        except AssertionError:
-            raise
 
     def inBoard(self, num):
         # returns true if the number is inside board,
