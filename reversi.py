@@ -305,7 +305,6 @@ class Reversi:
         # Checks if the valid moves are empty (the definition of game over)
         return validMoves == []
 
-    # This has some bugs with not selecting the correct winner
     def decideWinner(self, botScore, playerScore):
         # Decides the winner and prints the results
         print("Game Over!", '\n', "The final game board is: ", '\n', sep='')

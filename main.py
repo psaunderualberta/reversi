@@ -39,7 +39,7 @@ def main():
                 try:
                     if playersTurn and gameOn:
                         row = input("Which row you would you like to play? ")
-                        if row == 'quit':
+                        if row == 'quit': # easy way to stop game at any time
                             gameOn = False
                         reversi.checkInput(row)
                         col = input("Which column would you like to play? ")
