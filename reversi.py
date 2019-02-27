@@ -28,18 +28,6 @@ class Reversi:
     def newGame(self):
         # Produces a clean board for
         # each new game
-        print('', "NEW GAME", '',
-              "Welcome to 'Reversi'!",
-              "Reversi is a 2-player game, played on an 8 x 8 board. ",
-              "Players take turns placing their disks on the board",
-              "with their assigned colour (Black and White). ",
-              "Black is the first player to move. A player may place their ",
-              "disk anywhere on the board, as long as it surrounds a group of the opponents ",
-              "disks (vertically, horizontally, or diagonally) on opposite sides. ",
-              "Any disks that you surround will become yours and will flip over to your colour. ",
-              "The game is over when the current player has no possible legal move.",
-              "You will be playing against an artificial intelligence (AI)", 
-              "If at any point you would like to stop playing, type 'quit' when prompted for a row.", sep='\n')
 
         self.board = []
         for i in range(self.boardSize):

@@ -6,6 +6,18 @@ def main():
     # The main function of the algorithm
     continueGame = True
     reversi = Reversi()
+    print('', "NEW GAME", '',
+        "Welcome to 'Reversi'!",
+        "Reversi is a 2-player game, played on an 8 x 8 board. ",
+        "Players take turns placing their disks on the board",
+        "with their assigned colour (Black and White). ",
+        "Black is the first player to move. A player may place their ",
+        "disk anywhere on the board, as long as it surrounds a group of the opponents ",
+        "disks (vertically, horizontally, or diagonally) on opposite sides. ",
+        "Any disks that you surround will become yours and will flip over to your colour. ",
+        "The game is over when the current player has no possible legal move.",
+        "You will be playing against an artificial intelligence (AI)",
+        "If at any point you would like to stop playing, type 'quit' when prompted for a row.", sep='\n')
 
     # While the program is on
     while continueGame:
@@ -39,7 +51,7 @@ def main():
                 try:
                     if playersTurn and gameOn:
                         row = input("Which row you would you like to play? ")
-                        if row == 'quit': # easy way to stop game at any time
+                        if row.lower() == 'quit': # easy way to stop the game at any time
                             gameOn = False
                         reversi.checkInput(row)
                         col = input("Which column would you like to play? ")
