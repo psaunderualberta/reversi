@@ -30,7 +30,7 @@ class Reversi:
         # each new game
 
         self.board = []
-        for i in range(self.boardSize):
+        for row in range(self.boardSize):
             self.board.append(['.'] * self.boardSize)
 
         self.board[3][3], self.board[3][4] = 'w', 'b'
