@@ -38,7 +38,7 @@ def main():
             botMoves = reversi.findValidMoves(botColour)
             print("Player's moves:", playerMoves)
             print("Bot's moves:", botMoves)
-            if reversi.isGameOver(playerMoves) or reversi.isGameOver(botMoves):
+            if reversi.isGameOver(playerMoves, botMoves):
                 gameOn = False
             else:
                 # Don't display the board again if the
@@ -53,13 +53,14 @@ def main():
                         row = input("Which row you would you like to play? ")
                         if row.lower() == 'quit': # easy way to stop the game at any time
                             gameOn = False
-                        reversi.checkInput(row)
-                        col = input("Which column would you like to play? ")
-                        reversi.checkInput(col)
-                        playerPosition = (int(row), int(col))
-                        move = reversi.isPositionValid(playerPosition, playerMoves, playerColour, [0, 0])
-                        assert move, "You cannot choose that " + \
-                            "space. Please choose again."
+                        else:
+                            reversi.checkInput(row)
+                            col = input("Which column would you like to play? ")
+                            reversi.checkInput(col)
+                            playerPosition = (int(row), int(col))
+                            move = reversi.isPositionValid(playerPosition, playerMoves, playerColour, [0, 0])
+                            assert move, "You cannot choose that " + \
+                                "space. Please choose again."
                 except AssertionError as e:
                     validMove = False
                     print(e.args[0])
@@ -80,11 +81,6 @@ def main():
                         playersTurn = True
             playerScore = reversi.getScore(playerColour)
             botScore = reversi.getScore(botColour)
-        
-        if botMoves ==[]:
-            print("The bot has no more possible moves!")
-        elif playerMoves == []:
-            print("The player has no more possible moves!")
 
         reversi.decideWinner(botScore, playerScore)
         guess = ''

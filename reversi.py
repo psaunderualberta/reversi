@@ -289,9 +289,15 @@ class Reversi:
         
         return optimalMove[:2]
 
-    def isGameOver(self, validMoves):
+    def isGameOver(self, playerMoves, botMoves):
         # Checks if the valid moves are empty (the definition of game over)
-        return validMoves == []
+        if playerMoves == [] or botMoves == []:
+            if playerMoves == []:
+                print('The player has no more moves!')
+            if botMoves == []:
+                print("The player has no more moves!")
+            return True
+        return False
 
     def decideWinner(self, botScore, playerScore):
         # Decides the winner and prints the results
