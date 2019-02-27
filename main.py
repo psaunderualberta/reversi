@@ -6,7 +6,7 @@ def main():
     # The main function of the algorithm
     continueGame = True
     reversi = Reversi()
-    print('', "NEW GAME", '',
+    print(
         "Welcome to 'Reversi'!",
         "Reversi is a 2-player game, played on an 8 x 8 board. ",
         "Players take turns placing their disks on the board",
@@ -49,7 +49,7 @@ def main():
                     print("The bot's score is:", botScore, '\n')
                 # Validate input and moves
                 try:
-                    if playersTurn and gameOn:
+                    if playersTurn:
                         row = input("Which row you would you like to play? ")
                         if row.lower() == 'quit': # easy way to stop the game at any time
                             gameOn = False
@@ -68,17 +68,18 @@ def main():
                     print("Error: Invalid input. Please enter an integer from 0 to 7.")
                 else:
                     validMove = True
-                    if playersTurn:
-                        reversi.makeMovePlayer(playerPosition)
-                        playersTurn = False
-                    elif gameOn:
-                        # botPosition = reversi.makeMoveNaive(botMoves)
-                        botPosition = reversi.makeMoveSmart(botMoves)
-                        print("The bot chose the position:")
-                        print("Row:", botPosition[0])
-                        print("Column:", botPosition[1])
-                        reversi.makeMovePlayer(botPosition, True)
-                        playersTurn = True
+                    if gameOn:
+                        if playersTurn:
+                            reversi.makeMovePlayer(playerPosition)
+                            playersTurn = False
+                        else:
+                            # botPosition = reversi.makeMoveNaive(botMoves)
+                            botPosition = reversi.makeMoveSmart(botMoves)
+                            print("The bot chose the position:")
+                            print("Row:", botPosition[0])
+                            print("Column:", botPosition[1])
+                            reversi.makeMovePlayer(botPosition, True)
+                            playersTurn = True
             playerScore = reversi.getScore(playerColour)
             botScore = reversi.getScore(botColour)
 

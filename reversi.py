@@ -108,7 +108,7 @@ class Reversi:
                 valid.append(1)
         return valid
 
-    def findValidMoves(self, colour, hint=False):
+    def findValidMoves(self, colour):
         # THIS WORKS DO NOT TOUCH
         # Checks each possible direction to see if there are tiles to flip
         # If there is a possible string of colours, follow it until you reach a '.' or the opposing
@@ -149,12 +149,6 @@ class Reversi:
                                     middle - row) ** 2 + (middle - col) ** 2
                                 validMoves.append(
                                     (row, col, finalRow, finalCol, possibleScore, leastSquares))
-        # if hint:
-        #     for row in range(len(self.board)):
-        #         for col in range(len(self.board)):
-        #             for move in validMoves:
-        #                 if (row, col) == move[:2]:
-        #                     self.board[row][col] = '*'
 
         return validMoves
 
@@ -170,7 +164,7 @@ class Reversi:
 
         return self.moveset != []
 
-    # I don't use position (self.moveset instead), I just have it to appease the CMPUT175 Gods
+    # I don't use position (use self.moveset instead), I just have it to appease the CMPUT175 Gods
     def makeMovePlayer(self, position, bot=False):
         # Makes the player's move once it has been validated
         if bot:
@@ -188,7 +182,6 @@ class Reversi:
             finalRow = move[2]
             finalCol = move[3]
             if row - finalRow == 0:  # The disks are horizontal
-                # print("The horizontal was handled")
                 currentCoord = min(col, finalCol)
                 maxCoord = max(col, finalCol)
                 while currentCoord <= maxCoord:
@@ -197,7 +190,6 @@ class Reversi:
                     counter += 1
 
             elif col - finalCol == 0:  # The disks are vertical
-                # print("The vertical was handled")
                 currentCoord = min(row, finalRow)
                 maxCoord = max(row, finalRow)
                 while currentCoord <= maxCoord:
@@ -258,8 +250,7 @@ class Reversi:
         return (row, col)
 
     def makeMoveSmart(self, validMoves):
-        # Who fucking knows
-        # I fucking know
+        # So damn smart
         cornerMoves = []
         edgeMoves = []
         for move in validMoves:
@@ -292,10 +283,12 @@ class Reversi:
     def isGameOver(self, playerMoves, botMoves):
         # Checks if the valid moves are empty (the definition of game over)
         if playerMoves == [] or botMoves == []:
-            if playerMoves == []:
+            if playerMoves == [] and botMoves != []:
                 print('The player has no more moves!')
-            if botMoves == []:
-                print("The player has no more moves!")
+            elif botMoves == [] and playerMoves != []:
+                print("The bot has no more moves!")
+            else:
+                print("Neither player has any more moves!")
             return True
         return False
 
