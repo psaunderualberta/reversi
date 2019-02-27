@@ -54,9 +54,9 @@ def main():
                         if row.lower() == 'quit': # easy way to stop the game at any time
                             gameOn = False
                         else:
-                            reversi.checkInput(row)
+                            checkInput(row, reversi)
                             col = input("Which column would you like to play? ")
-                            reversi.checkInput(col)
+                            checkInput(col, reversi)
                             playerPosition = (int(row), int(col))
                             move = reversi.isPositionValid(playerPosition, playerMoves, playerColour, [0, 0])
                             assert move, "You cannot choose that " + \
@@ -92,15 +92,14 @@ def main():
             continueGame = False
 
 
-def checkInput(self, dig):
+def checkInput(dig, reversi):
         # Checks the player's input to see if it is valid.
         # The naive bot's input is checked in reversi's 
         # 'botValidation' method, whereas the smart bot does not need
         # input validation as it picks one from the set of valid moves
         try:
             int(dig)
-            assert self.inBoard(
-                int(dig)), "Please choose an integer between 0 and 7."
+            assert reversi.inBoard(int(dig)), "Please choose an integer between 0 and 7."
         except Exception:
             raise
 
