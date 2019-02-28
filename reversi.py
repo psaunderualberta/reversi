@@ -159,9 +159,11 @@ class Reversi:
                 self.moveset.append(move)
         if bot:
             self.botMoves = self.moveset
+            print("The bot's moves are:", self.botMoves)
             return self.moveset != []
         else:
             self.playerMoves = self.moveset
+            print("The player's moves are:", self.playerMoves)
             try:
                 assert self.moveset != [], "You cannot choose that " + \
                 "space. Please choose again."
