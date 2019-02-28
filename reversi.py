@@ -16,13 +16,14 @@ class Reversi:
     def __init__(self):
         # Initializes the game
         self.playerColour = ''
-        self.playerScore = 0
         self.botColour = ''
-        self.botScore = 0
+        self.playerScore = 2
+        self.botScore = 2
+        self.playerMoves = []
+        self.botMoves = []
         self.boardSize = 8
         self.topLevel = [str(i) for i in range(self.boardSize)]
         self.board = []
-        self.moveset = []
 
     def newGame(self):
         # Produces a clean board for
@@ -58,12 +59,14 @@ class Reversi:
         for i in range(self.boardSize):
             print(str(i) + ' ' * 2 + '  '.join(self.board[i]))
         print('\n')
+        print("The player's score is:", self.playerScore)
+        print("The bot's score is:", self.botScore, '\n')
 
     def getScore(self, colour):
         # Gets the score for the colour inputted
         colour = colour[0]
         score = 0
-        if colour == self.playerColour:
+        if colour == self.playerColour[0]:
             bot = False
         else:
             bot = True
@@ -94,9 +97,9 @@ class Reversi:
                 valid.append(0)
             else:
                 valid.append(1)
-        return valid
+        return valid == [0, 0]
 
-    def findValidMoves(self, colour):
+    def findValidMoves(self, colour, bot=False):
         # THIS WORKS DO NOT TOUCH
         # Checks each possible direction to see if there are tiles to flip
         # If there is a possible string of colours, follow it until you reach a '.' or the opposing
@@ -138,19 +141,32 @@ class Reversi:
                                 validMoves.append(
                                     (row, col, finalRow, finalCol, possibleScore, leastSquares))
 
+        if bot:
+            # print("The bot's moves are:", validMoves)
+            self.botMoves = validMoves
+        else:
+            # print("The player's moves are:", validMoves)
+            self.playerMoves = validMoves
         return validMoves
 
-    def isPositionValid(self, position, validMoves, colour, valid, bot=True):
+    def isPositionValid(self, position, colour, bot=False):
         # Checks and ensures the positions chosen are valid.
         # If they are valid, determines
         self.moveset = []
-        if valid == [0, 0]:
-            for move in validMoves:
-                if position == move[:2]:
-                    self.moveset.append(move)
-        # This is where 'findValidMoves' went before I moved it.
-
-        return self.moveset != []
+        validMoves = self.playerMoves if colour[0] == 'b' else self.botMoves
+        for move in validMoves:
+            if position == move[:2]:
+                self.moveset.append(move)
+        if bot:
+            self.botMoves = self.moveset
+            return self.moveset != []
+        else:
+            self.playerMoves = self.moveset
+            try:
+                assert self.moveset != [], "You cannot choose that " + \
+                "space. Please choose again."
+            except Exception:
+                raise
 
     # I don't use position (use self.moveset instead), I just have it to appease the CMPUT175 Gods
     def makeMovePlayer(self, position, bot=False):
@@ -184,8 +200,7 @@ class Reversi:
                     self.board[currentCoord][col] = colour
                     currentCoord += 1
                     counter += 1
-            else:
-                # the disks are diagonal
+            else: # the disks are diagonal
                 currentRow = row
                 currentCol = col
                 if row < finalRow and col < finalCol:
@@ -233,15 +248,16 @@ class Reversi:
             row = randint(0, 7)
             col = randint(0, 7)
             valid = self.botValidation((row, col))
-            if self.isPositionValid((row, col), validMoves, self.botColour, valid):
+
+            if self.isPositionValid((row, col), validMoves, True) and valid:
                 validBotMove = True
         return (row, col)
 
-    def makeMoveSmart(self, validMoves):
+    def makeMoveSmart(self):
         # So damn smart
         cornerMoves = []
         edgeMoves = []
-        for move in validMoves:
+        for move in self.botMoves:
             row = move[0]
             col = move[1]
             # test for corner moves
@@ -253,45 +269,50 @@ class Reversi:
 
         if cornerMoves != []:
             optimalMove = choice(cornerMoves)
-            self.isPositionValid(optimalMove[:2], validMoves, self.botColour, [0, 0])
         elif edgeMoves != []:
             optimalMove = choice(edgeMoves)
-            self.isPositionValid(optimalMove[:2], validMoves, self.botColour, [0, 0])
         else:
             # print('Make Move Smart')
-            validMoves = sorted(validMoves, key=lambda move: move[5])
+            validMoves = sorted(self.botMoves, key=lambda move: move[5])
             # print("The sorted and valid moves:", validMoves)
             bestLeastSquares = validMoves[0][5]
             optimalMoves = [move for move in validMoves if move[5] == bestLeastSquares]
             optimalMove = choice(optimalMoves)
-            self.isPositionValid(optimalMove[:2], validMoves, self.botColour, [0, 0])
-        
+
+        self.isPositionValid(optimalMove[:2], self.botColour)
+        print("The bot chose the position:")
+        print("Row:", optimalMove[0])
+        print("Column:", optimalMove[1])
         return optimalMove[:2]
 
-    def isGameOver(self, playerMoves, botMoves):
+    def isGameOver(self, quit=False):
         # Checks if the valid moves are empty (the definition of game over)
-        if playerMoves == [] or botMoves == []:
-            if playerMoves == [] and botMoves != []:
-                print("The player has no more moves,", end=' ')
-            elif botMoves == [] and playerMoves != []:
-                print("The bot has no more moves", end=' ')
+        if quit or self.playerMoves == [] or self.botMoves == []:
+            print('\n')
+            if quit:
+                print("The game was stopped by the player,", end=' ')
             else:
-                print("Neither player has any more moves", end=' ')
-            print("which means that the game is over!")
+                if self.playerMoves == [] and self.botMoves != []:
+                    print("The player has no possible moves,", end=' ')
+                elif self.botMoves == [] and self.playerMoves != []:
+                    print("The bot has no possible moves,", end=' ')
+                else:
+                    print("Neither player has any possible moves,", end=' ')
+            print("which means that the game is over.")
             return True
         return False
 
-    def decideWinner(self, botScore, playerScore):
+    def decideWinner(self):
         # Decides the winner and prints the results
-        print("Game Over!", '\n', "The final game board is: ", '\n', sep='')
+        print('\n', "The final game board is: ", '\n', sep='')
         self.displayBoard()
-        if botScore < playerScore:
-            print("The player wins by", str(playerScore - botScore))
-        elif botScore > playerScore:
-            print("The bot wins by", str(botScore - playerScore))
+        if self.botScore < self.playerScore:
+            print("The player wins by", str(self.playerScore - self.botScore))
+        elif self.botScore > self.playerScore:
+            print("The bot wins by", str(self.botScore - self.playerScore))
         else:
             print("Its a tie!")
         print("The player has a final score of " +
-              str(playerScore))
+              str(self.playerScore))
         print("The bot has a final score of " +
-              str(botScore))
+              str(self.botScore))
