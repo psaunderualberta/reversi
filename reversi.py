@@ -82,7 +82,7 @@ class Reversi:
         return score
 
     def inBoard(self, num):
-        # returns true if the number is inside board,
+        # returns true if num is inside the board,
         # false otherwise
         return 0 <= num <= 7
 
@@ -142,16 +142,17 @@ class Reversi:
                                     (row, col, finalRow, finalCol, possibleScore, leastSquares))
 
         if bot:
-            # print("The bot's moves are:", validMoves)
+            print("The bot's moves are:", validMoves)
             self.botMoves = validMoves
         else:
-            # print("The player's moves are:", validMoves)
+            print("The player's moves are:", validMoves)
             self.playerMoves = validMoves
         return validMoves
 
     def isPositionValid(self, position, colour, bot=False):
         # Checks and ensures the positions chosen are valid.
-        # If they are valid, determines
+        # If they are valid, appends the valid 
+        # moves to the respective moveset
         self.moveset = []
         validMoves = self.playerMoves if colour[0] == 'b' else self.botMoves
         for move in validMoves:
@@ -159,18 +160,15 @@ class Reversi:
                 self.moveset.append(move)
         if bot:
             self.botMoves = self.moveset
-            print("The bot's moves are:", self.botMoves)
             return self.moveset != []
         else:
             self.playerMoves = self.moveset
-            print("The player's moves are:", self.playerMoves)
             try:
                 assert self.moveset != [], "You cannot choose that " + \
                 "space. Please choose again."
             except Exception:
                 raise
 
-    # I don't use position (use self.moveset instead), I just have it to appease the CMPUT175 Gods
     def makeMovePlayer(self, position, bot=False):
         # Makes the player's move once it has been validated
         if bot:
