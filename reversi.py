@@ -44,7 +44,7 @@ class Reversi:
         # determines if the player wants a smart bot or naive bot
         b = ''
         while b not in ["SMART", "NAIVE"]:
-            b = input("Would you like to play against a smart bot or a naive bot? (smart / naive) ")
+            b = input("Would you like to play against a smart bot or a naive bot? (smart / naive) ").upper()
         return b == "SMART"
 
     def setPlayerColour(self):
