@@ -23,6 +23,7 @@ def main():
     while continueGame:
         gameOn = True
         reversi.newGame()
+        smartBot = reversi.smartOrNot()
         playerColour, botColour = reversi.setPlayerColour()
     
         # While there is a game on
@@ -63,8 +64,10 @@ def main():
                             reversi.makeMovePlayer(playerPosition)
                             playersTurn = False
                         else:
-                            # botPosition = reversi.makeMoveNaive()
-                            botPosition = reversi.makeMoveSmart()
+                            if smartBot:
+                                botPosition = reversi.makeMoveSmart()
+                            else:
+                                botPosition = reversi.makeMoveNaive()
                             reversi.makeMovePlayer(botPosition, bot=True)
                             playersTurn = True
             reversi.getScore(playerColour)
