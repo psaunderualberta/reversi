@@ -141,10 +141,8 @@ class Reversi:
                                     (row, col, finalRow, finalCol, leastSquares))
 
         if bot:
-            print("The bot's moves are:", self.moveset)
             self.botMoves = self.moveset
         else:
-            print("The player's moves are:", self.moveset)
             self.playerMoves = self.moveset
 
     def isPositionValid(self, position, colour, bot=False):
