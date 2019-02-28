@@ -40,6 +40,13 @@ class Reversi:
         print('', "Here is the starting board formation:", '', sep='\n')
         self.displayBoard()
 
+    def smartOrNot(self):
+        # determines if the player wants a smart bot or naive bot
+        b = ''
+        while b not in ["SMART", "NAIVE"]:
+            b = input("Would you like to play against a smart bot or a naive bot? (smart / naive) ")
+        return b == "SMART"
+
     def setPlayerColour(self):
         # Sets the player's colour
         self.playerColour == ''
