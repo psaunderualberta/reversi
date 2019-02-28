@@ -39,7 +39,6 @@ def main():
                 # player's input was invalid
                 if validMove and playersTurn:
                     reversi.displayBoard()
-                # Validate input and moves
                 try:
                     if playersTurn:
                         row = input("Which row you would you like to play? ")
@@ -64,7 +63,7 @@ def main():
                             reversi.makeMovePlayer(playerPosition)
                             playersTurn = False
                         else:
-                            # botPosition = reversi.makeMoveNaive(botMoves)
+                            # botPosition = reversi.makeMoveNaive()
                             botPosition = reversi.makeMoveSmart()
                             reversi.makeMovePlayer(botPosition, bot=True)
                             playersTurn = True
