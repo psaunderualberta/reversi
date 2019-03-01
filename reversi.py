@@ -19,8 +19,6 @@ class Reversi:
         self.botColour = ''
         self.playerScore = 2
         self.botScore = 2
-        self.playerMoves = []
-        self.botMoves = []
         self.moveset = []
         self.boardSize = 8
         self.topLevel = [str(i) for i in range(self.boardSize)]
@@ -97,6 +95,15 @@ class Reversi:
         # false otherwise
         return 0 <= num <= 7
 
+    def checkPlayerInput(self, num):
+        # Checks the player's input to see if it is valid.
+        try:
+            int(num)
+            assert self.inBoard(
+                int(num)), "Please choose an integer between 0 and 7."
+        except Exception:
+            raise
+
     def naiveBotValidation(self, position):
         # Validates the naive bot's inputs
         row = position[0]
@@ -153,10 +160,9 @@ class Reversi:
                 leastSquares = (
                     middle - row) ** 2 + (middle - col) ** 2
                 return (row, col, finalRow, finalCol, leastSquares)
-        else:
-            return None
+        return None
 
-    def isPositionValid(self, position, colour, bot=False):
+    def isPositionValid(self, position, colour, naiveBot=False):
         # Checks and ensures the positions chosen are valid.
         # If they are valid, appends the valid
         # moves to the respective moveset
@@ -165,9 +171,8 @@ class Reversi:
         for move in self.moveset:
             if position == move[:2]:
                 validMoves.append(move)
-        if bot:  # Only for naive bot
-            if validMoves != []:
-                self.botMoves = validMoves
+        self.moveset = validMoves
+        if naiveBot:  # Only for naive bot
             return validMoves != []
         else:
             try:
@@ -175,17 +180,13 @@ class Reversi:
                     "space. Please choose again."
             except Exception:
                 raise
-            else:
-                self.playerMoves = validMoves
 
     def makeMovePlayer(self, position, bot=False):
         # Makes the player's move once it has been validated
         if bot:
             colour = self.botColour[0]
-            self.moveset = self.botMoves
         else:
             colour = self.playerColour[0]
-            self.moveset = self.playerMoves
 
         counter = 0
         for move in self.moveset:
@@ -238,32 +239,35 @@ class Reversi:
         if row < finalRow and col < finalCol:
             # The diagonal is down-right
             while currentRow <= finalRow and currentCol <= finalCol:
-                self.board[currentRow][currentCol] = colour
-                currentRow += 1
-                currentCol += 1
-                counter += 1
+                currentRow, currentCol, counter = self.diagAdjust(colour, (currentRow, 1), (currentCol, 1), counter)
+
         elif row > finalRow and col < finalCol:
             # The diagonal is up-right
             while currentRow >= finalRow and currentCol <= finalCol:
-                self.board[currentRow][currentCol] = colour
-                currentRow += -1
-                currentCol += 1
-                counter += 1
+                currentRow, currentCol, counter = self.diagAdjust(colour, (currentRow, -1), (currentCol, 1), counter)
+
         elif row < finalRow and col > finalCol:
             # The diagonal is down-left
             while currentRow <= finalRow and currentCol >= finalCol:
-                self.board[currentRow][currentCol] = colour
-                currentRow += 1
-                currentCol += -1
-                counter += 1
+                currentRow, currentCol, counter = self.diagAdjust(colour, (currentRow, 1), (currentCol, -1), counter)
+
         elif row > finalRow and col > finalCol:
             # The diagonal is up-left
             while currentRow >= finalRow and currentCol >= finalCol:
-                self.board[currentRow][currentCol] = colour
-                currentRow += -1
-                currentCol += -1
-                counter += 1
+                currentRow, currentCol, counter = self.diagAdjust(colour, (currentRow, -1), (currentCol, -1), counter)
+
         return counter
+
+    def diagAdjust(self, colour, currentRowTup, currentColTup, counter):
+        # Performs the incrementing of the diagonal move's
+        # position across the board
+        currentRow, currentRowIncrement = currentRowTup[0], currentRowTup[1]
+        currentCol, currentColIncrement = currentColTup[0], currentColTup[1]
+        self.board[currentRow][currentCol] = colour
+        currentRow += currentRowIncrement
+        currentCol += currentColIncrement
+        counter += 1
+        return currentRow, currentCol, counter
 
     def makeMoveNaive(self):
         # Chooses a random spot that is valid,
@@ -304,7 +308,7 @@ class Reversi:
             bestLeastSquares = self.moveset[0][4]
             optimalMoves = [move for move in self.moveset if move[4] == bestLeastSquares]
             optimalMove = choice(optimalMoves)
-            self.botMoves = [move for move in optimalMoves if move[:2] == optimalMove[:2]]
+            self.moveset = [move for move in optimalMoves if move[:2] == optimalMove[:2]]
             self.showBotMove(optimalMove)
             return optimalMove
         return None
