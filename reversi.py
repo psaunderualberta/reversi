@@ -165,7 +165,7 @@ class Reversi:
                 return (row, col, finalRow, finalCol, leastSquares)
         return None
 
-    def isPositionValid(self, position, colour, bot=False):
+    def isPositionValid(self, position, colour, naiveBot=False):
         # Checks and ensures the positions chosen are valid.
         # If they are valid, appends the valid
         # moves to the respective moveset
@@ -174,9 +174,8 @@ class Reversi:
         for move in self.moveset:
             if position == move[:2]:
                 validMoves.append(move)
-        if bot:  # Only for naive bot
-            if validMoves != []:
-                self.botMoves = validMoves
+        self.moveset = validMoves
+        if naiveBot:  # Only for naive bot
             return validMoves != []
         else:
             try:
@@ -184,17 +183,13 @@ class Reversi:
                     "space. Please choose again."
             except Exception:
                 raise
-            else:
-                self.playerMoves = validMoves
 
     def makeMovePlayer(self, position, bot=False):
         # Makes the player's move once it has been validated
         if bot:
             colour = self.botColour[0]
-            self.moveset = self.botMoves
         else:
             colour = self.playerColour[0]
-            self.moveset = self.playerMoves
 
         counter = 0
         for move in self.moveset:
@@ -319,7 +314,7 @@ class Reversi:
             bestLeastSquares = self.moveset[0][4]
             optimalMoves = [move for move in self.moveset if move[4] == bestLeastSquares]
             optimalMove = choice(optimalMoves)
-            self.botMoves = [move for move in optimalMoves if move[:2] == optimalMove[:2]]
+            self.moveset = [move for move in optimalMoves if move[:2] == optimalMove[:2]]
             self.showBotMove(optimalMove)
             return optimalMove
         return None
