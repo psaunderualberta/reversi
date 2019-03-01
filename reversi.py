@@ -241,32 +241,35 @@ class Reversi:
         if row < finalRow and col < finalCol:
             # The diagonal is down-right
             while currentRow <= finalRow and currentCol <= finalCol:
-                self.board[currentRow][currentCol] = colour
-                currentRow += 1
-                currentCol += 1
-                counter += 1
+                currentRow, currentCol, counter = self.diagAdjust(colour, (currentRow, 1), (currentCol, 1), counter)
+
         elif row > finalRow and col < finalCol:
             # The diagonal is up-right
             while currentRow >= finalRow and currentCol <= finalCol:
-                self.board[currentRow][currentCol] = colour
-                currentRow += -1
-                currentCol += 1
-                counter += 1
+                currentRow, currentCol, counter = self.diagAdjust(colour, (currentRow, -1), (currentCol, 1), counter)
+
         elif row < finalRow and col > finalCol:
             # The diagonal is down-left
             while currentRow <= finalRow and currentCol >= finalCol:
-                self.board[currentRow][currentCol] = colour
-                currentRow += 1
-                currentCol += -1
-                counter += 1
+                currentRow, currentCol, counter = self.diagAdjust(colour, (currentRow, 1), (currentCol, -1), counter)
+
         elif row > finalRow and col > finalCol:
             # The diagonal is up-left
             while currentRow >= finalRow and currentCol >= finalCol:
-                self.board[currentRow][currentCol] = colour
-                currentRow += -1
-                currentCol += -1
-                counter += 1
+                currentRow, currentCol, counter = self.diagAdjust(colour, (currentRow, -1), (currentCol, -1), counter)
+
         return counter
+
+    def diagAdjust(self, colour, currentRowTup, currentColTup, counter):
+        # Performs the incrementing of the diagonal move's
+        # position across the board
+        currentRow, currentRowIncrement = currentRowTup[0], currentRowTup[1]
+        currentCol, currentColIncrement = currentColTup[0], currentColTup[1]
+        self.board[currentRow][currentCol] = colour
+        currentRow += currentRowIncrement
+        currentCol += currentColIncrement
+        counter += 1
+        return currentRow, currentCol, counter
 
     def makeMoveNaive(self):
         # Chooses a random spot that is valid,
