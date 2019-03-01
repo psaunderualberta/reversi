@@ -98,6 +98,15 @@ class Reversi:
         # false otherwise
         return 0 <= num <= 7
 
+    def checkPlayerInput(self, num):
+        # Checks the player's input to see if it is valid.
+        try:
+            int(num)
+            assert self.inBoard(
+                int(num)), "Please choose an integer between 0 and 7."
+        except Exception:
+            raise
+
     def naiveBotValidation(self, position):
         # Validates the naive bot's inputs
         row = position[0]
@@ -154,8 +163,7 @@ class Reversi:
                 leastSquares = (
                     middle - row) ** 2 + (middle - col) ** 2
                 return (row, col, finalRow, finalCol, leastSquares)
-        else:
-            return None
+        return None
 
     def isPositionValid(self, position, colour, bot=False):
         # Checks and ensures the positions chosen are valid.
