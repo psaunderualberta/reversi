@@ -74,6 +74,7 @@ class Reversi:
         if not newGame and not gameOver:
             print("The player's score is:", self.playerScore)
             print("The bot's score is:", self.botScore, '\n')
+            print("Type 'quit' to stop the game.", end='\n')
 
     def getScore(self, colour):
         # Gets the score for the colour inputted
