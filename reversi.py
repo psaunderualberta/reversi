@@ -95,19 +95,25 @@ class Reversi:
         # false otherwise
         return 0 <= num <= 7
 
-    def checkPlayerInput(self, num):
+    def checkPlayerInput(self, move):
         # Checks the player's input to see if it is valid.
-        if num.lower() == 'quit':  # easy way to stop the game at any time
+        errorMessage = "Please enter two integers between 0 and 7, separated by a space"
+        if move.lower() == 'quit':  # easy way to stop the game at any time
             print("The game was stopped by the player.")
             return False
         else:
             try:
-                int(num)
-                assert self.inBoard(
-                    int(num)), "Please choose an integer between 0 and 7."
-                return True
+                move = move.split(' ')
+                assert len(move) == 2, errorMessage
+                for item in move:
+                    int(item)
+                    assert self.inBoard(int(item)), errorMessage
             except Exception:
                 raise
+            else:
+                for i, value in enumerate(move):
+                    move[i] = int(value)
+                return True
 
     def naiveBotValidation(self, position):
         # Validates the naive bot's inputs
