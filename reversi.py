@@ -294,7 +294,6 @@ class Reversi:
         cornerMoves = []
         edgeMoves = []
         self.moveset = self.findValidMoves(self.botColour)
-        print(self.moveset)
         if not self.isGameOver():
             for move in self.moveset:
                 row = move[0]
