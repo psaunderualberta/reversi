@@ -25,7 +25,7 @@ def main():
         rev.newGame()
         smartBot = rev.smartOrNot()
         playerColour, botColour = rev.setPlayerColour()
-    
+
         # While there is a game on
         validMove = (playerColour == 'black')
         playersTurn = validMove
@@ -40,10 +40,12 @@ def main():
                     if rev.findValidMoves(playerColour) == []:
                         gameOn = False
                     else:
-                        playerPosition = input("Please enter the position you would like to play. (row column) ")
+                        playerPosition = input(
+                            "Please enter the position you would like to play. (row column) ")
                         gameOn = rev.checkPlayerInput(playerPosition)
                         if gameOn:
-                            playerPosition = (int(playerPosition[0]), int(playerPosition[2]))
+                            playerPosition = (
+                                int(playerPosition[0]), int(playerPosition[2]))
                             rev.isPositionValid(playerPosition, playerColour)
             except AssertionError as e:
                 validMove = False
@@ -77,5 +79,6 @@ def main():
         if guess.upper() == 'N':
             print('Thanks for playing!')
             continueGame = False
+
 
 main()

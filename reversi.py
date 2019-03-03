@@ -23,6 +23,8 @@ class Reversi:
         self.boardSize = 8
         self.topLevel = [str(i) for i in range(self.boardSize)]
         self.board = []
+        self.errorMessage = "Please enter two integers between 0 and 7, separated by a space"
+
 
     def newGame(self):
         # Produces a clean board for
@@ -42,7 +44,8 @@ class Reversi:
         # determines if the player wants a smart bot or naive bot
         botIntelligence = ''
         while botIntelligence not in ["SMART", "NAIVE"]:
-            botIntelligence = input("Would you like to play against a smart bot or a naive bot? (smart / naive) ").upper()
+            botIntelligence = input(
+                "Would you like to play against a smart bot or a naive bot? (smart / naive) ").upper()
         return botIntelligence == "SMART"
 
     def setPlayerColour(self):
@@ -98,17 +101,16 @@ class Reversi:
 
     def checkPlayerInput(self, move):
         # Checks the player's input to see if it is valid.
-        errorMessage = "Please enter two integers between 0 and 7, separated by a space"
         if move.lower() == 'quit':  # easy way to stop the game at any time
             print("The game was stopped by the player.")
             return False
         else:
             try:
                 move = move.split(' ')
-                assert len(move) == 2, errorMessage
+                assert len(move) == 2, self.errorMessage
                 for item in move:
                     int(item)
-                    assert self.inBoard(int(item)), errorMessage
+                    assert self.inBoard(int(item)), self.errorMessage
             except Exception:
                 raise
             else:
@@ -249,27 +251,31 @@ class Reversi:
         if row < finalRow and col < finalCol:
             # The diagonal is down-right
             while currentRow <= finalRow and currentCol <= finalCol:
-                currentRow, currentCol, counter = self.diagAdjust(colour, (currentRow, 1), (currentCol, 1), counter)
+                currentRow, currentCol, counter = self.diagAdjust(
+                    colour, (currentRow, 1), (currentCol, 1), counter)
 
         elif row > finalRow and col < finalCol:
             # The diagonal is up-right
             while currentRow >= finalRow and currentCol <= finalCol:
-                currentRow, currentCol, counter = self.diagAdjust(colour, (currentRow, -1), (currentCol, 1), counter)
+                currentRow, currentCol, counter = self.diagAdjust(
+                    colour, (currentRow, -1), (currentCol, 1), counter)
 
         elif row < finalRow and col > finalCol:
             # The diagonal is down-left
             while currentRow <= finalRow and currentCol >= finalCol:
-                currentRow, currentCol, counter = self.diagAdjust(colour, (currentRow, 1), (currentCol, -1), counter)
+                currentRow, currentCol, counter = self.diagAdjust(
+                    colour, (currentRow, 1), (currentCol, -1), counter)
 
         elif row > finalRow and col > finalCol:
             # The diagonal is up-left
             while currentRow >= finalRow and currentCol >= finalCol:
-                currentRow, currentCol, counter = self.diagAdjust(colour, (currentRow, -1), (currentCol, -1), counter)
+                currentRow, currentCol, counter = self.diagAdjust(
+                    colour, (currentRow, -1), (currentCol, -1), counter)
 
         return counter
 
     def setCoord(self, start, final):
-        # Sets the start and end spots for 
+        # Sets the start and end spots for
         # rowMove and colMove
         currentCoord = min(start, final)
         maxCoord = max(start, final)
@@ -323,9 +329,11 @@ class Reversi:
             # Choose the best move by its position on the board
             self.moveset = sorted(self.moveset, key=lambda move: move[4])
             bestLeastSquares = self.moveset[0][4]
-            optimalMoves = [move for move in self.moveset if move[4] == bestLeastSquares]
+            optimalMoves = [
+                move for move in self.moveset if move[4] == bestLeastSquares]
             optimalMove = choice(optimalMoves)
-            self.moveset = [move for move in optimalMoves if move[:2] == optimalMove[:2]]
+            self.moveset = [
+                move for move in optimalMoves if move[:2] == optimalMove[:2]]
             self.showBotMove(optimalMove)
             return optimalMove
         return None
