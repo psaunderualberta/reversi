@@ -4,7 +4,7 @@ from reversi import Reversi
 def main():
     # The main function of the algorithm
     continueGame = True
-    reversi = Reversi()
+    rev = Reversi()
     print(
         "Welcome to 'Reversi'!",
         "Reversi is a 2-player game, played on an 8 x 8 board. ",
@@ -21,24 +21,22 @@ def main():
     # While the program is on
     while continueGame:
         gameOn = True
-        reversi.newGame()
-        smartBot = reversi.smartOrNot()
-        playerColour, botColour = reversi.setPlayerColour()
+        rev.newGame()
+        smartBot = rev.smartOrNot()
+        playerColour, botColour = rev.setPlayerColour()
     
         # While there is a game on
         validMove = (playerColour == 'black')
         playersTurn = validMove
 
         while gameOn:
-            # reversi.findValidMoves(playerColour)
-            # reversi.findValidMoves(botColour, True)
             # Don't display the board again if the
             # player's input was invalid
             if validMove and playersTurn:
-                reversi.displayBoard()
+                rev.displayBoard()
             try:
                 if playersTurn:
-                    if reversi.findValidMoves(playerColour) == []:
+                    if rev.findValidMoves(playerColour) == []:
                         gameOn = False
                     else:
                         row = input("Which row you would you like to play? ")
@@ -46,11 +44,11 @@ def main():
                             print("The game was stopped by the player.")
                             gameOn = False
                         else:
-                            reversi.checkPlayerInput(row)
+                            rev.checkPlayerInput(row)
                             col = input("Which column would you like to play? ")
-                            reversi.checkPlayerInput(col)
+                            rev.checkPlayerInput(col)
                             playerPosition = (int(row), int(col))
-                            reversi.isPositionValid(playerPosition, playerColour)
+                            rev.isPositionValid(playerPosition, playerColour)
             except AssertionError as e:
                 validMove = False
                 print(e.args[0])
@@ -61,22 +59,22 @@ def main():
                 validMove = True
                 if gameOn:
                     if playersTurn:
-                        reversi.makeMovePlayer(playerPosition)
+                        rev.makeMovePlayer(playerPosition)
                         playersTurn = False
                     else:
                         if smartBot:
-                            botPosition = reversi.makeMoveSmart()
+                            botPosition = rev.makeMoveSmart()
                         else:
-                            botPosition = reversi.makeMoveNaive()
+                            botPosition = rev.makeMoveNaive()
                         if botPosition == False:
                             gameOn = False
                         else:
-                            reversi.makeMovePlayer(botPosition, bot=True)
+                            rev.makeMovePlayer(botPosition, bot=True)
                         playersTurn = True
-            reversi.getScore(playerColour)
-            reversi.getScore(botColour)
+            rev.getScore(playerColour)
+            rev.getScore(botColour)
 
-        reversi.decideWinner()
+        rev.decideWinner()
         guess = ''
         while guess not in ['Y', 'N']:
             guess = input("Would you like to play again? (Y/N) ").upper()
