@@ -15,6 +15,7 @@ def main():
         "disks (vertically, horizontally, or diagonally) on opposite sides. ",
         "Any disks that you surround will become yours and will flip over to your colour. ",
         "The game is over when the current player has no possible legal move.",
+        "Please enter your moves in the form 'row column', separated by a single space",
         "You will be playing against an artificial intelligence (AI)",
         "If at any point you would like to stop playing, type 'quit' when prompted for a row.", sep='\n')
 
@@ -39,15 +40,10 @@ def main():
                     if rev.findValidMoves(playerColour) == []:
                         gameOn = False
                     else:
-                        row = input("Which row you would you like to play? ")
-                        if row.lower() == 'quit': # easy way to stop the game at any time
-                            print("The game was stopped by the player.")
-                            gameOn = False
-                        else:
-                            rev.checkPlayerInput(row)
-                            col = input("Which column would you like to play? ")
-                            rev.checkPlayerInput(col)
-                            playerPosition = (int(row), int(col))
+                        playerPosition = input("Please enter the position you would like to play. (row column) ")
+                        gameOn = rev.checkPlayerInput(playerPosition)
+                        if gameOn:
+                            playerPosition = (int(playerPosition[0]), int(playerPosition[2]))
                             rev.isPositionValid(playerPosition, playerColour)
             except AssertionError as e:
                 validMove = False

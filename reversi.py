@@ -9,7 +9,7 @@ from random import randint, choice
 # I chose to automatically pick corners if they were available,
 # and then if no corners were available to pick pieces on edges,
 # and then if no edges or corners were available to pick the spot closest to
-# the centre using a 'least-squares' method (line 139)
+# the centre using a 'least-squares' method (somewhere around line 160)
 
 
 class Reversi:
@@ -19,8 +19,6 @@ class Reversi:
         self.botColour = ''
         self.playerScore = 2
         self.botScore = 2
-        self.playerMoves = []
-        self.botMoves = []
         self.moveset = []
         self.boardSize = 8
         self.topLevel = [str(i) for i in range(self.boardSize)]
@@ -44,13 +42,12 @@ class Reversi:
         # determines if the player wants a smart bot or naive bot
         botIntelligence = ''
         while botIntelligence not in ["SMART", "NAIVE"]:
-            botIntelligence = input(
-                "Would you like to play against a smart bot or a naive bot? (smart / naive) ").upper()
+            botIntelligence = input("Would you like to play against a smart bot or a naive bot? (smart / naive) ").upper()
         return botIntelligence == "SMART"
 
     def setPlayerColour(self):
         # Sets the player's colour
-        self.playerColour == ''
+        self.playerColour = ''
         while self.playerColour not in ['black', 'white']:
             self.playerColour = input(
                 "Which colour would you like to be? (black / white) ").lower()
@@ -98,14 +95,25 @@ class Reversi:
         # false otherwise
         return 0 <= num <= 7
 
-    def checkPlayerInput(self, num):
+    def checkPlayerInput(self, move):
         # Checks the player's input to see if it is valid.
-        try:
-            int(num)
-            assert self.inBoard(
-                int(num)), "Please choose an integer between 0 and 7."
-        except Exception:
-            raise
+        errorMessage = "Please enter two integers between 0 and 7, separated by a space"
+        if move.lower() == 'quit':  # easy way to stop the game at any time
+            print("The game was stopped by the player.")
+            return False
+        else:
+            try:
+                move = move.split(' ')
+                assert len(move) == 2, errorMessage
+                for item in move:
+                    int(item)
+                    assert self.inBoard(int(item)), errorMessage
+            except Exception:
+                raise
+            else:
+                for i, value in enumerate(move):
+                    move[i] = int(value)
+                return True
 
     def naiveBotValidation(self, position):
         # Validates the naive bot's inputs
@@ -193,13 +201,11 @@ class Reversi:
 
         counter = 0
         for move in self.moveset:
-            # print('Bot: ' + str(bot) + '. Move: ' + str(move))
             counter += -2  # to account for the two end tiles
             row = move[0]
             col = move[1]
             finalRow = move[2]
             finalCol = move[3]
-            print(row, col, finalRow, finalCol)
             if row - finalRow == 0:  # The disks are horizontal
                 counter = self.rowMove(
                     row, col, finalRow, finalCol, colour, counter)
@@ -219,8 +225,7 @@ class Reversi:
 
     def rowMove(self, row, col, finalRow, finalCol, colour, counter):
         # Runs when the move is on the same row
-        currentCoord = min(col, finalCol)
-        maxCoord = max(col, finalCol)
+        currentCoord, maxCoord = self.setCoord(col, finalCol)
         while currentCoord <= maxCoord:
             self.board[row][currentCoord] = colour
             currentCoord += 1
@@ -229,8 +234,7 @@ class Reversi:
 
     def colMove(self, row, col, finalRow, finalCol, colour, counter):
         # Runs when the move is on the same column
-        currentCoord = min(row, finalRow)
-        maxCoord = max(row, finalRow)
+        currentCoord, maxCoord = self.setCoord(row, finalRow)
         while currentCoord <= maxCoord:
             self.board[currentCoord][col] = colour
             currentCoord += 1
@@ -262,6 +266,13 @@ class Reversi:
                 currentRow, currentCol, counter = self.diagAdjust(colour, (currentRow, -1), (currentCol, -1), counter)
 
         return counter
+
+    def setCoord(self, start, final):
+        # Sets the start and end spots for 
+        # rowMove and colMove
+        currentCoord = min(start, final)
+        maxCoord = max(start, final)
+        return currentCoord, maxCoord
 
     def diagAdjust(self, colour, currentRowTup, currentColTup, counter):
         # Performs the incrementing of the diagonal move's
