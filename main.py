@@ -40,15 +40,13 @@ def main():
                         gameOn = False
                     else:
                         row = input("Which row you would you like to play? ")
-                        if row.lower() == 'quit': # easy way to stop the game at any time
-                            print("The game was stopped by the player.")
-                            gameOn = False
-                        else:
-                            rev.checkPlayerInput(row)
+                        gameOn = rev.checkPlayerInput(row)
+                        if gameOn:
                             col = input("Which column would you like to play? ")
-                            rev.checkPlayerInput(col)
-                            playerPosition = (int(row), int(col))
-                            rev.isPositionValid(playerPosition, playerColour)
+                            gameOn = rev.checkPlayerInput(col)
+                            if gameOn:
+                                playerPosition = (int(row), int(col))
+                                rev.isPositionValid(playerPosition, playerColour)
             except AssertionError as e:
                 validMove = False
                 print(e.args[0])
