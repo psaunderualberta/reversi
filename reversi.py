@@ -47,7 +47,7 @@ class Reversi:
 
     def setPlayerColour(self):
         # Sets the player's colour
-        self.playerColour == ''
+        self.playerColour = ''
         while self.playerColour not in ['black', 'white']:
             self.playerColour = input(
                 "Which colour would you like to be? (black / white) ").lower()

@@ -39,6 +39,7 @@ def main():
                     if reversi.findValidMoves(playerColour) == []:
                         gameOn = False
                     else:
+                        print(reversi.findValidMoves(playerColour))
                         row = input("Which row you would you like to play? ")
                         if row.lower() == 'quit': # easy way to stop the game at any time
                             print("The game was stopped by the player.")
