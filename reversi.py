@@ -219,8 +219,7 @@ class Reversi:
 
     def rowMove(self, row, col, finalRow, finalCol, colour, counter):
         # Runs when the move is on the same row
-        currentCoord = min(col, finalCol)
-        maxCoord = max(col, finalCol)
+        currentCoord, maxCoord = self.setCoord(col, finalCol)
         while currentCoord <= maxCoord:
             self.board[row][currentCoord] = colour
             currentCoord += 1
@@ -229,8 +228,7 @@ class Reversi:
 
     def colMove(self, row, col, finalRow, finalCol, colour, counter):
         # Runs when the move is on the same column
-        currentCoord = min(row, finalRow)
-        maxCoord = max(row, finalRow)
+        currentCoord, maxCoord = self.setCoord(row, finalRow)
         while currentCoord <= maxCoord:
             self.board[currentCoord][col] = colour
             currentCoord += 1
@@ -262,6 +260,13 @@ class Reversi:
                 currentRow, currentCol, counter = self.diagAdjust(colour, (currentRow, -1), (currentCol, -1), counter)
 
         return counter
+
+    def setCoord(self, start, final):
+        # Sets the start and end spots for 
+        # rowMove and colMove
+        currentCoord = min(start, final)
+        maxCoord = max(start, final)
+        return currentCoord, maxCoord
 
     def diagAdjust(self, colour, currentRowTup, currentColTup, counter):
         # Performs the incrementing of the diagonal move's
